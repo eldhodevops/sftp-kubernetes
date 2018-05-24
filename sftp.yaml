@@ -1,0 +1,25 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: sftp-eldho
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: my-ftp
+    spec:
+      volumes:
+       - name: task-pv-storage
+         persistentVolumeClaim:
+          claimName: task-pv-claim
+      containers:
+      - name: my-ftp-container
+        image: eldhodoc/sftp
+        ports:
+        - name: port22
+          containerPort: 22
+        args: ["eldho:pass:::upload"]
+        volumeMounts:
+         - mountPath: /home/
+           name: task-pv-storage
